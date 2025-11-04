@@ -1,0 +1,5 @@
+hello world
+this is a test dataset
+machine learning is fun
+hello machine
+this dataset will help test sharkai

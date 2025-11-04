@@ -1,0 +1,278 @@
+<input>Hello! How are you today?</input>
+<output>I’m doing well, thanks. How about you?</output>
+
+<input>I’m good, just a bit tired from work.</input>
+<output>I understand. Do you want to chat or relax?</output>
+
+<input>Let’s chat. What do you want to talk about?</input>
+<output>How about hobbies? What do you like to do?</output>
+
+<input>I enjoy reading and playing guitar. You?</input>
+<output>I like painting and hiking. Do you paint?</output>
+
+<input>Not really. I stick to music mostly.</input>
+<output>That’s cool. What kind of music do you play?</output>
+
+<input>Mostly acoustic and some classical guitar.</input>
+<output>Nice. Have you performed in front of an audience?</output>
+
+<input>Yes, a few small local gigs.</input>
+<output>That sounds fun. I’ve never performed live.</output>
+
+<input>You should try it; it can be rewarding.</input>
+<output>Do you have any favorite books?</output>
+
+<input>Yes, I love science fiction and mystery novels.</input>
+<output>Which sci-fi books do you recommend?</output>
+
+<input>“Dune” by Frank Herbert and “Neuromancer” by William Gibson.</input>
+<output>I’ve heard of Dune. What about mysteries?</output>
+
+<input>Anything by Agatha Christie. “Murder on the Orient Express” is great.</input>
+<output>I’ve read that one! Very clever plot twists.</output>
+
+<input>Exactly, she’s a master of suspense.</input>
+<output>Do you like watching movies too?</output>
+
+<input>Yes, especially thrillers and documentaries.</input>
+<output>Any recent documentary you liked?</output>
+
+<input>“My Octopus Teacher” was fascinating.</input>
+<output>I’ve seen that! The ocean footage is stunning.</output>
+
+<input>Totally. Nature documentaries are so immersive.</input>
+<output>Do you enjoy cooking or baking?</output>
+
+<input>A little. I bake cookies sometimes.</input>
+<output>Cookies are great. What’s your favorite flavor?</output>
+
+<input>Chocolate chip, classic. You?</input>
+<output>I like oatmeal raisin cookies. Healthier and tasty.</output>
+
+<input>Do you follow any TV shows?</input>
+<output>Yes, “Stranger Things” and “The Mandalorian.”</output>
+
+<input>Both are popular. Which one do you like more?</input>
+<output>“The Mandalorian” for the action, but “Stranger Things” is fun too.</output>
+
+<input>Do you play video games?</input>
+<output>Occasionally. Mostly puzzle games.</output>
+
+<input>Puzzle games are good for the brain.</input>
+<output>Indeed. Have you tried any escape room games?</output>
+
+<input>Yes, online ones. They’re challenging.</input>
+<output>Would you prefer real-life escape rooms?</output>
+
+<input>Definitely, more exciting and immersive.</input>
+<output>Do you enjoy traveling?</output>
+
+<input>Yes, I love exploring new places.</input>
+<output>Mountains or beaches?</output>
+
+<input>Mountains. I like hiking and nature.</input>
+<output>Any favorite travel destination?</output>
+
+<input>Switzerland. The scenery is incredible.</input>
+<output>I’ve always wanted to go there.</output>
+
+<input>You should. It’s worth it.</input>
+<output>Do you speak other languages?</output>
+
+<input>Yes, Spanish and a little French.</input>
+<output>That’s impressive. How did you learn?</output>
+
+<input>School and practice with friends.</input>
+<output>I’m learning French too, slowly.</output>
+
+<input>Practice is key. Try speaking daily.</input>
+<output>Do you like pets?</output>
+
+<input>Yes, I have a cat named Luna.</input>
+<output>Cats are adorable. How old is Luna?</output>
+
+<input>Two years old. Very playful.</input>
+<output>Do you have other pets?</output>
+
+<input>Not currently, just Luna.</input>
+<output>I have a dog, Max. Very friendly.</output>
+
+<input>Dogs are loyal companions.</input>
+<output>Indeed. They brighten the day.</output>
+
+<input>Do you enjoy sports?</input>
+<output>Yes, I play tennis sometimes.</output>
+
+<input>Tennis is fun. How often do you play?</input>
+<output>Once or twice a week.</output>
+
+<input>Do you watch sports too?</input>
+<output>Occasionally, mostly soccer.</output>
+
+<input>Favorite team?</input>
+<output>Barcelona. You?</output>
+
+<input>Real Madrid. Classic rivalry.</input>
+<output>Do you like music concerts?</output>
+
+<input>Yes, live music is amazing.</input>
+<output>Best concert you attended?</output>
+
+<input>A local jazz festival last summer.</input>
+<output>That sounds fun. Jazz is relaxing.</output>
+
+<input>Do you enjoy art galleries?</input>
+<output>Yes, modern art especially.</output>
+
+<input>Favorite artist?</input>
+<output>Van Gogh. His colors are incredible.</output>
+
+<input>Do you like museums too?</input>
+<output>Yes, history and science museums.</output>
+
+<input>Favorite museum visit?</input>
+<output>The Natural History Museum in London.</output>
+
+<input>Would you like to travel there again?</input>
+<output>Yes, it’s worth another visit.</output>
+
+<input>Do you enjoy writing?</input>
+<output>A bit, mostly journaling.</output>
+
+<input>Have you ever tried poetry?</input>
+<output>Yes, short poems occasionally.</output>
+
+<input>Do you prefer reading fiction or non-fiction?</input>
+<output>Fiction, for imagination and escape.</output>
+
+<input>Do you like podcasts?</input>
+<output>Yes, science and tech podcasts.</output>
+
+<input>Any favorite episode recently?</input>
+<output>A discussion on AI ethics. Very insightful.</output>
+
+<input>Do you follow current events?</input>
+<output>Yes, but selectively.</output>
+
+<input>Do you use social media much?</input>
+<output>Moderately, mostly for news and friends.</output>
+
+<input>Do you prefer texting or calling?</input>
+<output>Texting, it’s quicker.</output>
+
+<input>Do you enjoy board games?</input>
+<output>Yes, strategy games mostly.</output>
+
+<input>Favorite board game?</input>
+<output>Catan. Very competitive.</output>
+
+<input>Do you play cards too?</input>
+<output>Occasionally, poker or rummy.</output>
+
+<input>Do you enjoy outdoor activities?</input>
+<output>Yes, hiking and cycling mostly.</output>
+
+<input>Do you like camping?</input>
+<output>Yes, very refreshing and peaceful.</output>
+
+<input>Have you been to national parks?</input>
+<output>Several. Yellowstone is my favorite.</output>
+
+<input>Do you enjoy photography?</input>
+<output>Yes, mostly landscapes.</output>
+
+<input>Do you edit your photos?</input>
+<output>A little, mostly brightness and contrast.</output>
+
+<input>Do you like cooking shows?</input>
+<output>Yes, they’re inspiring.</output>
+
+<input>Do you prefer sweet or savory foods?</input>
+<output>Savory, mostly.</output>
+
+<input>Do you drink coffee or tea?</input>
+<output>Tea in the morning, coffee occasionally.</output>
+
+<input>Do you like desserts?</input>
+<output>Yes, chocolate and fruit-based desserts.</output>
+
+<input>Do you enjoy festivals?</input>
+<output>Yes, cultural and music festivals.</output>
+
+<input>Do you like learning new skills?</input>
+<output>Yes, always interested in trying new things.</output>
+
+<input>Do you enjoy technology and gadgets?</input>
+<output>Yes, especially smart home devices.</output>
+
+<input>Do you play musical instruments?</input>
+<output>Guitar mostly, sometimes piano.</output>
+
+<input>Do you like movies in theaters?</input>
+<output>Yes, the big screen is better.</output>
+
+<input>Do you enjoy comedy shows?</input>
+<output>Yes, stand-up is fun.</output>
+
+<input>Do you like traveling solo?</input>
+<output>Sometimes, for self-discovery.</output>
+
+<input>Do you enjoy group activities?</input>
+<output>Yes, social events and games.</output>
+
+<input>Do you like reading newspapers?</input>
+<output>Occasionally, mostly online.</output>
+
+<input>Do you prefer fiction books or comics?</input>
+<output>Fiction books, but comics are fun too.</output>
+
+<input>Do you like learning languages?</input>
+<output>Yes, it’s challenging and rewarding.</output>
+
+<input>Do you enjoy gardening?</input>
+<output>Yes, growing flowers and vegetables.</output>
+
+<input>Do you like science experiments?</input>
+<output>Yes, simple home experiments.</output>
+
+<input>Do you enjoy volunteering?</input>
+<output>Yes, helps the community.</output>
+
+<input>Do you like exploring cities?</input>
+<output>Yes, discovering new places and culture.</output>
+
+<input>Do you enjoy festivals and parades?</input>
+<output>Yes, the atmosphere is lively.</output>
+
+<input>Do you like watching theater plays?</input>
+<output>Yes, live performances are unique.</output>
+
+<input>Do you enjoy painting?</input>
+<output>Yes, mostly watercolors.</output>
+
+<input>Do you like crafts?</input>
+<output>Occasionally, DIY projects.</output>
+
+<input>Do you enjoy hiking mountains?</input>
+<output>Yes, the view is rewarding.</output>
+
+<input>Do you like swimming?</input>
+<output>Yes, especially in lakes.</output>
+
+<input>Do you enjoy learning history?</input>
+<output>Yes, it provides perspective.</output>
+
+<input>Do you like astronomy?</input>
+<output>Yes, stargazing is fascinating.</output>
+
+<input>Do you enjoy meditation?</input>
+<output>Yes, it’s calming.</output>
+
+<input>Do you like attending workshops?</input>
+<output>Yes, for skill development.</output>
+
+<input>Do you enjoy photography trips?</input>
+<output>Yes, capturing nature is satisfying.</output>
+
+<input>Do you like visiting libraries?</input>
+<output>Yes, peaceful and resourceful.</output>
