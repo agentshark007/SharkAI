@@ -2,6 +2,8 @@ import random
 import string
 import math
 import numpy as np
+import pickle
+import os
 
 # Activation functions
 def softmax(x):
@@ -92,21 +94,47 @@ class Model:
         return result
 
 class SharkAI:
-    def __init__(self, dataset, hidden_sizes=[128,64], learning_rate=0.05, epochs=200, max_output_length=100):
+    def __init__(self, dataset, hidden_sizes=[128,64], learning_rate=0.05, epochs=200, max_output_length=100, model_file="model.txt"):
         self.dataset = dataset
         self.hidden_sizes = hidden_sizes
         self.learning_rate = learning_rate
         self.epochs = epochs
         self.max_output_length = max_output_length
-        self.model = Model(dataset, hidden_sizes, learning_rate)
+        self.model_file = model_file
+        self.model = None
+
+        self.load_or_train_model()
 
     def train(self):
         print("Training started")
         for epoch in range(self.epochs):
             loss = self.model.train_step(self.dataset)
-            if (epoch+1) % 10 == 0 or epoch == 0:
-                print(f"Epoch {epoch+1}/{self.epochs} | Loss: {loss:.6f}")
+            print(f"Epoch {epoch+1}/{self.epochs} | Loss: {loss:.6f}")
         print("Training done")
+        self.save_model()
+
+    def save_model(self):
+        with open(self.model_file, "wb") as f:
+            pickle.dump(self.model, f)
+        print(f"Model saved to {self.model_file}")
+
+    def load_or_train_model(self):
+        if os.path.exists(self.model_file):
+            try:
+                with open(self.model_file, "rb") as f:
+                    self.model = pickle.load(f)
+                # Quick check: ensure essential attributes exist
+                if not hasattr(self.model, "weights") or not hasattr(self.model, "biases"):
+                    raise ValueError("Invalid model file")
+                print(f"Loaded model from {self.model_file}")
+            except Exception:
+                print(f"Invalid model file detected. Re-training...")
+                os.remove(self.model_file)
+                self.model = Model(self.dataset, self.hidden_sizes, self.learning_rate)
+                self.train()
+        else:
+            self.model = Model(self.dataset, self.hidden_sizes, self.learning_rate)
+            self.train()
 
     def generate_text(self, prompt):
         return self.model.generate_text(prompt, self.max_output_length)
@@ -118,13 +146,12 @@ if __name__ == "__main__":
 
     ai = SharkAI(
         dataset,
-        hidden_sizes=[128, 256, 512, 256, 128],
+        hidden_sizes=[256, 128],
         learning_rate=0.05,
-        epochs=300,
-        max_output_length=150
+        epochs=1000,
+        max_output_length=150,
+        model_file="model.txt"
     )
-
-    ai.train()
 
     while True:
         prompt = input(">>: ")
