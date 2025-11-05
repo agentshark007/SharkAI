@@ -4,6 +4,15 @@ class SharkAI:
     def __init__(self, dataset):
         self.dataset = dataset
         self.ready = False
+        self.cache = {}
+        
+    def set_dataset(self, dataset):
+        self.dataset = dataset
+        self.cache = {}
+
+    def clear_cache(self):
+        self.cache = {}
+        pass
 
     def setup(self, lookback_characters, max_response_length):
         self.lookback_characters = lookback_characters
@@ -25,14 +34,21 @@ class SharkAI:
         lookback_characters_original = lookback_characters
         end_indices = []
 
-        while lookback_characters > 0 and end_indices == []:
-            end_indices = find_sequence_end_indices(self.dataset, prompt[-lookback_characters:])
-            lookback_characters -= 1
+
+        if prompt[-lookback_characters_original:] in self.cache:
+                end_indices = self.cache[prompt[-lookback_characters_original:]]
+        else:
+            while lookback_characters > 0 and end_indices == []:
+                end_indices = find_sequence_end_indices(self.dataset, prompt[-lookback_characters:])
+                lookback_characters -= 1
 
         if end_indices:
             character_index = random.choice(end_indices) + 1
             if character_index >= len(self.dataset):
                 character_index = 0
+
+            self.cache[prompt[-lookback_characters_original:]] = end_indices
+
             return self.dataset[character_index]
         else:
             return random.choice(self.dataset)
