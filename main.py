@@ -43,7 +43,7 @@ class SharkAI:
                 next_char = self.next(prompt, self.lookback_characters, self.dataset)
                 prompt += next_char
         else:
-            return "Not ready to generate"
+            return prompt
         
         return prompt
 
