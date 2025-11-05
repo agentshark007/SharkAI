@@ -10,7 +10,7 @@ class SharkAI:
         self.max_response_length = max_response_length
         self.ready = True
 
-    def _next_char(self, prompt, lookback_characters, dataset):
+    def _next_char(self, prompt, lookback_characters):
         def find_sequence_end_indices(data, seq):
             indices = []
             start = 0
@@ -26,21 +26,21 @@ class SharkAI:
         end_indices = []
 
         while lookback_characters > 0 and end_indices == []:
-            end_indices = find_sequence_end_indices(dataset, prompt[-lookback_characters:])
+            end_indices = find_sequence_end_indices(self.dataset, prompt[-lookback_characters:])
             lookback_characters -= 1
 
         if end_indices:
             character_index = random.choice(end_indices) + 1
-            if character_index >= len(dataset):
+            if character_index >= len(self.dataset):
                 character_index = 0
-            return dataset[character_index]
+            return self.dataset[character_index]
         else:
-            return random.choice(dataset)
+            return random.choice(self.dataset)
 
     def generate(self, prompt):
         if self.ready:
             for i in range(self.max_response_length):
-                next_char = self._next_char(prompt, self.lookback_characters, self.dataset)
+                next_char = self._next_char(prompt, self.lookback_characters)
                 prompt += next_char
         else:
             return prompt
