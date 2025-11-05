@@ -1,3 +1,5 @@
+# SMG – Sequential Markov Generator
+
 import random
 
 class SharkAI:
