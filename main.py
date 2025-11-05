@@ -42,10 +42,23 @@ class SharkAI:
             for i in range(self.max_response_length):
                 next_char = self._next_char(prompt, self.lookback_characters)
                 prompt += next_char
+            
+            return prompt
         else:
             return prompt
-        
-        return prompt
+    
+    def print(self, prompt):
+        if self.ready:
+            print(prompt, end='', flush=True)
+
+            for i in range(self.max_response_length):
+                next_char = self._next_char(prompt, self.lookback_characters)
+                prompt += next_char
+                print(next_char, end='', flush=True)
+        else:
+            print(prompt)
+
+        print("\n")
 
 if __name__ == "__main__":
     dataset_file = "data.txt"
@@ -62,4 +75,4 @@ if __name__ == "__main__":
 
         if prompt.lower() == "exit":
             break
-        print(ai.generate(prompt))
+        ai.print(prompt)
