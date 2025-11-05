@@ -82,7 +82,7 @@ if __name__ == "__main__":
         dataset = f.read()
 
     ai = SharkAI(dataset)
-    ai.setup(lookback_characters=20, max_response_length=100)
+    ai.setup(lookback_characters=10, max_response_length=100000)
 
 
     print("SharkAI is ready. Type 'exit' to exit the program. Type your prompt below:")
