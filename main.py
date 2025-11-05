@@ -1,5 +1,3 @@
-# SMG – Sequential Markov Generator
-
 import random
 
 class SharkAI:
@@ -7,13 +5,12 @@ class SharkAI:
         self.dataset = dataset
         self.ready = False
 
-    def setup(self, lookback_characters, lookback_influence, max_response_length):
+    def setup(self, lookback_characters, max_response_length):
         self.lookback_characters = lookback_characters
-        self.lookback_influence = lookback_influence
         self.max_response_length = max_response_length
         self.ready = True
 
-    def next(self, prompt, lookback_characters, lookback_influence, dataset):
+    def next(self, prompt, lookback_characters, dataset):
         def find_sequence_end_indices(data, seq):
             indices = []
             start = 0
@@ -26,22 +23,16 @@ class SharkAI:
             return indices
 
         lookback_characters_original = lookback_characters
-
         end_indices = []
+
         while lookback_characters > 0 and end_indices == []:
             end_indices = find_sequence_end_indices(dataset, prompt[-lookback_characters:])
             lookback_characters -= 1
 
-            if random.random() < lookback_influence:
-                if random.random() < lookback_characters / lookback_characters_original:
-                    end_indices = []
-
         if end_indices:
             character_index = random.choice(end_indices) + 1
-
             if character_index >= len(dataset):
                 character_index = 0
-
             return dataset[character_index]
         else:
             return random.choice(dataset)
@@ -49,7 +40,7 @@ class SharkAI:
     def generate(self, prompt):
         if self.ready:
             for i in range(self.max_response_length):
-                next_char = self.next(prompt, self.lookback_characters, self.lookback_influence, self.dataset)
+                next_char = self.next(prompt, self.lookback_characters, self.dataset)
                 prompt += next_char
         else:
             return "Not ready to generate"
@@ -62,7 +53,7 @@ if __name__ == "__main__":
         dataset = f.read()
 
     ai = SharkAI(dataset)
-    ai.setup(lookback_characters=50, lookback_influence=0.8, max_response_length=100)
+    ai.setup(lookback_characters=20, max_response_length=100)
 
     while True:
         prompt = input(">>: ")
