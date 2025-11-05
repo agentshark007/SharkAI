@@ -1,4 +1,5 @@
 import random
+import time
 
 class SharkAI:
     def __init__(self, dataset):
@@ -63,13 +64,15 @@ class SharkAI:
         else:
             return prompt
     
-    def print(self, prompt):
+    def print(self, prompt, delay=False):
         if self.ready:
             print(prompt, end='', flush=True)
 
             for i in range(self.max_response_length):
                 next_char = self._next_char(prompt, self.lookback_characters)
                 prompt += next_char
+                if delay:
+                    time.sleep(random.randint(5, 50) / 1000)
                 print(next_char, end='', flush=True)
         else:
             print(prompt)
@@ -82,7 +85,7 @@ if __name__ == "__main__":
         dataset = f.read()
 
     ai = SharkAI(dataset)
-    ai.setup(lookback_characters=10, max_response_length=100000)
+    ai.setup(lookback_characters=10, max_response_length=100)
 
 
     print("SharkAI is ready. Type 'exit' to exit the program. Type your prompt below:")
