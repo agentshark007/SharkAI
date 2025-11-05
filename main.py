@@ -1,158 +1,67 @@
 import random
-import string
-import math
-import numpy as np
-import pickle
-import os
-
-# Activation functions
-def softmax(x):
-    e_x = np.exp(x - np.max(x))
-    return e_x / e_x.sum()
-
-def relu(x):
-    return np.maximum(0, x)
-
-def relu_derivative(x):
-    return (x > 0).astype(float)
-
-class Model:
-    def __init__(self, dataset, hidden_sizes, learning_rate):
-        self.chars = sorted(list(set(dataset + string.printable)))
-        self.char_to_idx = {c: i for i, c in enumerate(self.chars)}
-        self.idx_to_char = {i: c for i, c in enumerate(self.chars)}
-        self.vocab_size = len(self.chars)
-        self.learning_rate = learning_rate
-        
-        # Network architecture
-        layer_sizes = [self.vocab_size] + hidden_sizes + [self.vocab_size]
-        self.weights = [np.random.randn(layer_sizes[i], layer_sizes[i+1]) * 0.01 
-                        for i in range(len(layer_sizes)-1)]
-        self.biases = [np.zeros(layer_sizes[i+1]) for i in range(len(layer_sizes)-1)]
-
-    def forward(self, x_idx):
-        x = np.zeros(self.vocab_size)
-        x[x_idx] = 1.0
-        self.layer_inputs = []
-        self.layer_outputs = [x]
-
-        for i in range(len(self.weights)-1):
-            z = np.dot(self.layer_outputs[-1], self.weights[i]) + self.biases[i]
-            self.layer_inputs.append(z)
-            self.layer_outputs.append(relu(z))
-
-        z = np.dot(self.layer_outputs[-1], self.weights[-1]) + self.biases[-1]
-        self.layer_inputs.append(z)
-        y_hat = softmax(z)
-        self.layer_outputs.append(y_hat)
-        return y_hat
-
-    def backward(self, x_idx, y_idx):
-        grads_w = [np.zeros_like(w) for w in self.weights]
-        grads_b = [np.zeros_like(b) for b in self.biases]
-
-        y_hat = self.forward(x_idx)
-
-        delta = y_hat.copy()
-        delta[y_idx] -= 1
-        grads_w[-1] = np.outer(self.layer_outputs[-2], delta)
-        grads_b[-1] = delta
-
-        delta_prev = delta
-        for i in reversed(range(len(self.weights)-1)):
-            delta = np.dot(delta_prev, self.weights[i+1].T) * relu_derivative(self.layer_inputs[i])
-            grads_w[i] = np.outer(self.layer_outputs[i], delta)
-            grads_b[i] = delta
-            delta_prev = delta
-
-        for i in range(len(self.weights)):
-            self.weights[i] -= self.learning_rate * grads_w[i]
-            self.biases[i] -= self.learning_rate * grads_b[i]
-
-        return -math.log(y_hat[y_idx] + 1e-8)
-
-    def train_step(self, dataset):
-        loss = 0
-        for i in range(len(dataset)-1):
-            x_idx = self.char_to_idx[dataset[i]]
-            y_idx = self.char_to_idx[dataset[i+1]]
-            loss += self.backward(x_idx, y_idx)
-        return loss / (len(dataset)-1)
-
-    def predict_next_char(self, char):
-        idx = self.char_to_idx.get(char, random.randint(0, self.vocab_size-1))
-        probs = self.forward(idx)
-        next_idx = np.random.choice(range(self.vocab_size), p=probs)
-        return self.idx_to_char[next_idx]
-
-    def generate_text(self, prompt, max_length):
-        result = ""
-        for _ in range(max_length):
-            next_char = self.predict_next_char(prompt[-1])
-            result += next_char
-            prompt += next_char
-        return result
 
 class SharkAI:
-    def __init__(self, dataset, hidden_sizes=[128,64], learning_rate=0.05, epochs=200, max_output_length=100, model_file="model.txt"):
+    def __init__(self, dataset):
         self.dataset = dataset
-        self.hidden_sizes = hidden_sizes
-        self.learning_rate = learning_rate
-        self.epochs = epochs
-        self.max_output_length = max_output_length
-        self.model_file = model_file
-        self.model = None
+        self.ready = False
 
-        self.load_or_train_model()
+    def setup(self, lookback_characters, lookback_influence, max_response_length):
+        self.lookback_characters = lookback_characters
+        self.lookback_influence = lookback_influence
+        self.max_response_length = max_response_length
+        self.ready = True
 
-    def train(self):
-        print("Training started")
-        for epoch in range(self.epochs):
-            loss = self.model.train_step(self.dataset)
-            print(f"Epoch {epoch+1}/{self.epochs} | Loss: {loss:.6f}")
-        print("Training done")
-        self.save_model()
+    def next(self, prompt, lookback_characters, lookback_influence, dataset):
+        def find_sequence_end_indices(data, seq):
+            indices = []
+            start = 0
+            while True:
+                idx = data.find(seq, start)
+                if idx == -1:
+                    break
+                indices.append(idx + len(seq) - 1)
+                start = idx + 1
+            return indices
 
-    def save_model(self):
-        with open(self.model_file, "wb") as f:
-            pickle.dump(self.model, f)
-        print(f"Model saved to {self.model_file}")
+        lookback_characters_original = lookback_characters
 
-    def load_or_train_model(self):
-        if os.path.exists(self.model_file):
-            try:
-                with open(self.model_file, "rb") as f:
-                    self.model = pickle.load(f)
-                # Quick check: ensure essential attributes exist
-                if not hasattr(self.model, "weights") or not hasattr(self.model, "biases"):
-                    raise ValueError("Invalid model file")
-                print(f"Loaded model from {self.model_file}")
-            except Exception:
-                print(f"Invalid model file detected. Re-training...")
-                os.remove(self.model_file)
-                self.model = Model(self.dataset, self.hidden_sizes, self.learning_rate)
-                self.train()
+        end_indices = []
+        while lookback_characters > 0 and end_indices == []:
+            end_indices = find_sequence_end_indices(dataset, prompt[-lookback_characters:])
+            lookback_characters -= 1
+
+            if random.random() < lookback_influence:
+                if random.random() < lookback_characters / lookback_characters_original:
+                    end_indices = []
+
+        if end_indices:
+            character_index = random.choice(end_indices) + 1
+
+            if character_index >= len(dataset):
+                character_index = 0
+
+            return dataset[character_index]
         else:
-            self.model = Model(self.dataset, self.hidden_sizes, self.learning_rate)
-            self.train()
+            return random.choice(dataset)
 
-    def generate_text(self, prompt):
-        return self.model.generate_text(prompt, self.max_output_length)
+    def generate(self, prompt):
+        if self.ready:
+            for i in range(self.max_response_length):
+                next_char = self.next(prompt, self.lookback_characters, self.lookback_influence, self.dataset)
+                prompt += next_char
+        else:
+            return "Not ready to generate"
+        
+        return prompt
 
 if __name__ == "__main__":
     dataset_file = "data.txt"
     with open(dataset_file, "r") as f:
         dataset = f.read()
 
-    ai = SharkAI(
-        dataset,
-        hidden_sizes=[256, 128],
-        learning_rate=0.05,
-        epochs=1000,
-        max_output_length=150,
-        model_file="model.txt"
-    )
+    ai = SharkAI(dataset)
+    ai.setup(lookback_characters=5, lookback_influence=1, max_response_length=50)
 
     while True:
         prompt = input(">>: ")
-        print(ai.generate_text(prompt))
+        print(ai.generate(prompt))
