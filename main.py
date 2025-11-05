@@ -60,7 +60,7 @@ if __name__ == "__main__":
         dataset = f.read()
 
     ai = SharkAI(dataset)
-    ai.setup(lookback_characters=5, lookback_influence=1, max_response_length=50)
+    ai.setup(lookback_characters=50, lookback_influence=0.8, max_response_length=100)
 
     while True:
         prompt = input(">>: ")
