@@ -1,6 +1,6 @@
 class Node:
-    def __init__(self, name, node_type):
-        self.name = name
+    def __init__(self, id, node_type):
+        self.id = id
         self.node_type = node_type  # e.g., 'input', 'hidden', 'output'
 
 class Connection:
@@ -66,13 +66,48 @@ class NeuralNetwork:
                 for o_node in output_nodes:
                     self.connections.append(Connection(i_node, o_node, 0.1))
 
-    def add_node(self, name, node_type):
+    def add_node(self, id, node_type):
         # Add a node to the network
-        self.nodes.append(Node(name, node_type))
+        self.nodes.append(Node(id, node_type))
 
     def add_connection(self, from_node, to_node, weight):
         # Add a connection between nodes with a specified weight
         self.connections.append((from_node, to_node, weight))
+
+    def set_weight(self, id, value):
+        self.connections[id].weight = value
+
+    def set_value(self, id, value):
+        for node in self.nodes:
+            if node.id == id:
+                node.value = value
+                break
+
+    def determine_value(self, node_id):
+        # Find target node
+        target_node = next((n for n in self.nodes if n.id == node_id), None)
+        if not target_node:
+            return None
+
+        # Input nodes must already have a value
+        if target_node.node_type == "input":
+            return getattr(target_node, "value", 0)
+
+        # Collect all incoming connections
+        incoming = [c for c in self.connections if c.to_node.id == node_id]
+
+        # Weighted sum of inputs
+        total_input = 0
+        for conn in incoming:
+            from_value = getattr(conn.from_node, "value", None)
+            if from_value is None:
+                from_value = self.determine_value(conn.from_node.id)
+            total_input += conn.weight * from_value
+
+        # Activation function (sigmoid)
+        target_value = 1 / (1 + math.exp(-total_input))
+        target_node.value = target_value
+        return target_value
 
 class SLM:
     def __init__(self, dataset):
