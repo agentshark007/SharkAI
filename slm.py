@@ -35,6 +35,7 @@ class SLM:
             next_token = self.network.forward(input_seq)
             next_token_rounded = round(next_token)
             tokens.append(next_token_rounded)
+            token_str = detokenize([next_token_rounded])
+            print(token_str, end='', flush=True)
         response = detokenize(tokens)
-        print(response)
         return response
