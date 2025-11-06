@@ -1,4 +1,3 @@
-import math
 from tiktoktoken import TikTokToken
 from network import NeuralNetwork
 
@@ -9,43 +8,45 @@ class SLM:
         self.network = None
         self.initialized = False
         self.trained = False
+        self.lookback_tokens = None
 
     def initialize_network(self, hidden_layers, lookback_tokens):
-        # Generate tokenizer on dataset
+        # Use the dataset as-is, including literal <START>, <SEP>, <END>
         self.tokenizer.generate_tokens(self.dataset)
         self.lookback_tokens = lookback_tokens
+
         self.network = NeuralNetwork()
         self.network.generate_structure(lookback_tokens, hidden_layers, 1)
-        self.network.input_size = lookback_tokens  # for training loop
+        self.network.input_size = lookback_tokens
         self.initialized = True
 
     def train(self, epochs, influence=0.1):
         if not self.initialized:
             raise Exception("Network not initialized.")
 
-        # Tokenize entire dataset
+        # Tokenize the entire dataset
         token_dataset = []
         for text in self.dataset:
             token_dataset.extend(self.tokenizer.tokenize(text))
 
-        # Simple online training
+        # Simple naive online training
         for _ in range(epochs):
             for i in range(len(token_dataset) - self.network.input_size):
                 inputs = token_dataset[i:i + self.network.input_size]
                 target = token_dataset[i + self.network.input_size]
 
-                # Set input values
-                for idx, node in enumerate(list(self.network.nodes.values())[:self.network.input_size]):
+                # Set input node values
+                for idx, node in enumerate(self.network.input_nodes):
                     node.value = inputs[idx]
 
                 # Forward pass
-                output = self.network.determine_value(f"output-0")
+                self.network.forward()
+                output_val = self.network.get_output()[0]
 
-                # Backward placeholder: simple weight adjustment for demonstration
-                # A real backprop is not implemented in the previous network class
-                error = target - output
+                # Naive weight adjustment
+                error = target - output_val
                 for conn in self.network.connections:
-                    conn.weight += influence * error  # very naive adjustment
+                    conn.weight += influence * error
 
         self.trained = True
 
@@ -53,22 +54,25 @@ class SLM:
         if not self.trained:
             raise Exception("Model not trained.")
 
-        tokens = self.tokenizer.prepare_for_response_generation(prompt, self.lookback_tokens)
+        tokens = self.tokenizer.tokenize(prompt)
+        vocab_start = self.tokenizer.token_dict["<START>"]
 
         for _ in range(length):
-            input_seq = tokens[-self.lookback_tokens:]
+            input_seq = tokens[-self.network.input_size:]
+            # pad if sequence is too short
+            if len(input_seq) < self.network.input_size:
+                input_seq = [vocab_start] * (self.network.input_size - len(input_seq)) + input_seq
 
-            # Set input values
-            for idx, node in enumerate(list(self.network.nodes.values())[:self.network.input_size]):
+            for idx, node in enumerate(self.network.input_nodes):
                 node.value = input_seq[idx]
 
-            # Forward pass
-            next_token_val = self.network.determine_value("output-0")
-            next_token_id = round(next_token_val)
+            self.network.forward()
+            next_token_id = self.network.map_output_to_token(len(self.tokenizer.token_dict))
             tokens.append(next_token_id)
 
             token_str = self.tokenizer.detokenize([next_token_id])
             print(token_str, end='', flush=True)
 
-        print()  # newline at the end
+        print()
         return self.tokenizer.detokenize(tokens)
+

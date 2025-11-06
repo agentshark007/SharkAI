@@ -29,7 +29,7 @@ class TikTokToken:
                     tokens.append(self.token_dict[sub])
                     i += n
                     break
-            else:  # fallback single char
+            else:
                 tokens.append(self.token_dict.get(text[i], len(self.token_dict)))
                 i += 1
         return tokens
@@ -56,7 +56,6 @@ class TikTokToken:
         return tokenized_datasets
 
     def prepare_for_response_generation(self, prompt, lookback_characters):
-        # Format: <START>user<SEP>prompt<END><START>assistant<SEP>
         trimmed_prompt = prompt[-lookback_characters:]
         s, sep, e = self.token_dict["<START>"], self.token_dict["<SEP>"], self.token_dict["<END>"]
         tokens = [s] + self.tokenize("user") + [sep] + self.tokenize(trimmed_prompt) + [e] + [s] + self.tokenize("assistant") + [sep]

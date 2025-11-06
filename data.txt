@@ -1,1 +1,5 @@
 <START>user<SEP>hi<END><START>assistant<SEP>Hello user!<END>
+<START>user<SEP>how are you?<END><START>assistant<SEP>I am fine, thank you.<END>
+<START>user<SEP>what is your name?<END><START>assistant<SEP>I am SharkAI.<END>
+<START>user<SEP>tell me a joke<END><START>assistant<SEP>Why did the computer go to the doctor? It caught a virus!<END>
+<START>user<SEP>goodbye<END><START>assistant<SEP>See you later!<END>
