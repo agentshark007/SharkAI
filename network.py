@@ -1,3 +1,5 @@
+import math
+
 class Node:
     def __init__(self, id, node_type):
         self.id = id
