@@ -1,34 +1,35 @@
-import pyautogui as pg
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 import time
 
-pg.FAILSAFE = True
-pg.PAUSE = 0.2
+def generate(iterations):
+    print("Loading website...")
 
-# Open safari
-pg.keyDown("command")
-pg.keyDown("tab")
-pg.keyUp("tab")
-pg.keyUp("command")
+    driver = webdriver.Safari()
+    driver.get("https://baturin.org/tools/bnfgen/")
+    time.sleep(0.5)
 
-# Open data tab
-pg.moveTo((103, 102))
-pg.click()
+    print("Website loaded.")
 
-# Scroll to content
-pg.moveTo((1504, 281))
-pg.click()
+    def generate_single():
+        driver.find_element(By.CSS_SELECTOR, 'input[value="Generate"]').click()
+        time.sleep(0.1)
+        return driver.find_element(By.ID, "output").text
 
-for i in range(1):
-    # Click generate button
-    pg.moveTo((839, 481))
-    pg.click()
+    print("Generating...")
 
-    # Select text
-    pg.moveTo((394, 637))
-    pg.tripleClick()
+    output = ""
+    for _ in range(iterations):
+        print(f"Iteration {_ + 1}/{iterations}")
+        output += generate_single()
 
-    # Copy text
-    pg.keyDown("commmand")
-    pg.keyDown("c")
-    pg.keyUp("c")
-    pg.keyUp("command") 
+    print("Done generating.")
+
+    driver.quit()
+    return output
+
+if __name__ == "__main__":
+    result = generate(500)
+    print(result)
+    with open("data_retreived.txt", "w") as file:
+        file.write(result)
