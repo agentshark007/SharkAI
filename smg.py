@@ -68,25 +68,27 @@ class SMG:
     def generate(self, prompt):
         # Generate text by repeatedly predicting next characters
         if self.ready:
-            for i in range(self.max_response_length):
+            # for i in range(self.max_response_length):
+            #     next_char = self._next_char(prompt, self.lookback_characters)
+            #     prompt += next_char
+            # return prompt
+
+            prompt = f"<START>user<SEP>{prompt}<END><START>assistant<SEP>"
+            original_prompt = prompt
+
+            end_sequence = False
+
+            while not (end_sequence or len(prompt.removeprefix(original_prompt)) > self.max_response_length):
                 next_char = self._next_char(prompt, self.lookback_characters)
                 prompt += next_char
-            return prompt
-        else:
-            return prompt
-    
-    def print(self, prompt, delay=False):
-        # Print generated text with optional typing delay
-        if self.ready:
-            print(prompt, end='', flush=True)
 
-            for i in range(self.max_response_length):
-                next_char = self._next_char(prompt, self.lookback_characters)
-                prompt += next_char
-                if delay:
-                    time.sleep(random.randint(5, 50) / 1000)  # Simulate typing
-                print(next_char, end='', flush=True)
-        else:
-            print(prompt)
+                if prompt.endswith("<END>"):
+                    end_sequence = True
 
-        print("\n")
+            prompt = prompt.removeprefix(original_prompt)
+            prompt = prompt.removesuffix("<END>")
+
+            return prompt
+
+        else:
+            return "Error: SharkAI not configured. Please run setup() before generating text."

@@ -1,19 +1,17 @@
-from slm import SLM
+from smg import SMG
 
 def main():
     with open("data.txt", "r") as f:
-        dataset = f.read().splitlines()
+        dataset = f.read()
 
-    ai = SLM(dataset)
-    ai.initialize_network(hidden_layers=[20], lookback_tokens=10)
-    ai.train(epochs=5, influence=0.1)
+    ai = SMG(dataset)
+    ai.setup(lookback_characters=5, max_response_length=100)
+    ai.set_dataset(dataset)
 
-    print("SharkAI is ready. Type 'exit' to quit.")
     while True:
         prompt = input(">>: ")
-        if prompt.lower() == "exit":
-            break
-        ai.generate_and_print_response(prompt, length=50)
+        response = ai.generate(prompt)
+        print(response)
 
 if __name__ == "__main__":
     main()
