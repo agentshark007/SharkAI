@@ -29,7 +29,7 @@ def generate(iterations):
     return output
 
 if __name__ == "__main__":
-    result = generate(500)
+    result = generate(5000)
     print(result)
     with open("data_retreived.txt", "w") as file:
         file.write(result)
