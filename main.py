@@ -5,7 +5,7 @@ def main():
         dataset = f.read()
 
     ai = SMG(dataset)
-    ai.setup(lookback_characters=5, max_response_length=100)
+    ai.setup(lookback_characters=5, max_response_length=100, start_tag="<START>", seperator_tag="<SEP>", end_tag="<END>")
     ai.set_dataset(dataset)
 
     while True:

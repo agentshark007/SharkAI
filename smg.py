@@ -18,10 +18,15 @@ class SMG:
         self.cache = {}
         pass
 
-    def setup(self, lookback_characters, max_response_length):
+    def setup(self, lookback_characters, max_response_length, start_tag, seperator_tag, end_tag):
         # Configure model parameters
         self.lookback_characters = lookback_characters
         self.max_response_length = max_response_length
+
+        self.start_tag = start_tag
+        self.seperator_tag = seperator_tag
+        self.end_tag = end_tag
+
         self.ready = True
 
     def _next_char(self, prompt, lookback_characters):
@@ -73,7 +78,7 @@ class SMG:
             #     prompt += next_char
             # return prompt
 
-            prompt = f"<START>user<SEP>{prompt}<END><START>assistant<SEP>"
+            prompt = f"{self.start_tag}user{self.seperator_tag}{prompt}{self.end_tag}{self.start_tag}assistant{self.seperator_tag}"
             original_prompt = prompt
 
             end_sequence = False
@@ -86,7 +91,10 @@ class SMG:
                     end_sequence = True
 
             prompt = prompt.removeprefix(original_prompt)
-            prompt = prompt.removesuffix("<END>")
+
+            prompt = prompt.replace(self.start_tag, "")
+            prompt = prompt.replace(self.seperator_tag, "")
+            prompt = prompt.replace(self.end_tag, "")
 
             return prompt
 
