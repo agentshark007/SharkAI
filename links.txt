@@ -1,3 +1,0 @@
-https://baturin.org/tools/bnfgen/
-https://pypi.org/project/PyAutoGUI/
-https://huggingface.co/datasets/openai/gsm8k/viewer
