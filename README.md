@@ -1,4 +1,15 @@
-# SMG – Sequential Markov Generator
+# Deep Learning Experement kinda thing...
+
+
+
+
+Alright! We are doing some stuff to turn this thing into a deep learning neural network kinda thing.
+
+
+
+...
+
+
 
 SMG is a character-level text generator that predicts the next character in a sequence by scanning a dataset for matching sequences. It uses a simple Sequential-Markov lookup approach with adjustable lookback and supports conversation-style tagging.
 
