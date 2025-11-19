@@ -1,83 +1,88 @@
-# Deep Learning Experement kinda thing...
+# Neural Network Experiment
 
+This project is a basic feedforward neural network for experimentation with biases, weights, and forward propagation. It is designed for learning and testing neural network concepts with simple datasets.
 
-
-
-Alright! We are doing some stuff to turn this thing into a deep learning neural network kinda thing.
-
-
-
-...
-
-
-
-SMG is a character-level text generator that predicts the next character in a sequence by scanning a dataset for matching sequences. It uses a simple Sequential-Markov lookup approach with adjustable lookback and supports conversation-style tagging.
+---
 
 ## Features
 
-* Character-level generation
-* Adjustable lookback window
-* Configurable maximum response length
-* Conversation-tag support (`<START>`, `<SEP>`, `<END>`)
-* Lightweight implementation
-* Cache for repeated sequence lookups
+* Fully connected feedforward network
+* Input, hidden, and output layers
+* Randomized weights and biases
+* Forward propagation using sigmoid activation
+* Access and modification of nodes, weights, and biases
+* Lightweight and easy to extend
+* Forward generation from input to output
+
+---
 
 ## Installation
 
 1. Clone or download the project.
 2. Ensure Python 3 is installed.
-3. Provide a dataset file named `data.txt` in the project folder.
+3. Provide a dataset file named `data.txt` in the project folder (optional, for experiments).
+
+---
 
 ## Usage
 
-1. Run the generator:
-
-```bash
-python main.py
-```
-
-2. Enter a prompt at the `>>:` prompt.
-3. SMG generates a response based on dataset patterns.
-
-## Configuration
-
-When initializing SMG, you can configure:
-
-* `lookback_characters` – Number of characters used to search for sequence matches.
-* `max_response_length` – Maximum number of characters in the generated response.
-* `start_tag`, `seperator_tag`, `end_tag` – Tags used to structure conversation data.
-
-Example setup:
-
 ```python
-ai.setup(
-    lookback_characters=20,
-    max_response_length=100,
-    start_tag="<START>",
-    seperator_tag="<SEP>",
-    end_tag="<END>"
-)
+from neural_network import *
+
+# Create a neural network
+nn = NeuralNetwork()
+
+# Add layers: 2 inputs, 3 hidden nodes, 1 output
+nn.add_layer(InputLayer(2))
+nn.add_layer(HiddenLayer(3))
+nn.add_layer(OutputLayer(1))
+
+# Generate random connections
+nn.generate_connections()
+
+# Set input values
+nn.set_input(0, 0.5)
+nn.set_input(1, -0.7)
+
+# Run forward propagation
+outputs = nn.generate([0.5, -0.7])
+print("Network output:", outputs)
+
+# Optional: inspect weights and biases
+print("\nWeights:")
+for i, layer_conn in enumerate(nn.connections):
+    print(f"Layer {i} to {i+1}: {layer_conn}")
+
+print("\nBiases:")
+for i, layer in enumerate(nn.layers):
+    print(f"Layer {i} biases: {layer.nodes}")
 ```
 
-## How It Works
+---
 
-1. SMG scans the dataset for sequences matching the end of your prompt.
-2. If a match is found, the next character after the match is selected.
-3. If no match exists, a random character from the dataset is used.
-4. Responses are automatically wrapped in `<START>assistant<SEP>` … `<END>` tags.
+## Neural Network API
 
-## Example Dataset Format
+* `add_layer(layer)` – Add `InputLayer`, `HiddenLayer`, or `OutputLayer`
+* `generate_connections()` – Randomly initialize weights between layers
+* `forward()` – Compute outputs from current inputs
+* `get_input(node)` / `set_input(node, value)` – Access input nodes
+* `get_output(node)` – Access output nodes
+* `get_value(layer, node)` / `set_value(layer, node, value)` – Access any node
+* `get_weight(start_layer, start_node, end_layer, end_node)` / `set_weight(...)` – Access weights
+* `get_bias(layer, node)` / `set_bias(layer, node, value)` – Access biases
+* `nudge_weight` / `nudge_bias` – Increment weights or biases
+* `randomize_weight` / `randomize_bias` – Randomize weights or biases
+
+---
+
+## Example Dataset Format (optional)
 
 ```
 <START>user<SEP>Hello<END>
 <START>assistant<SEP>Hi there!<END>
 ```
 
-## Notes
-
-* Larger datasets improve response quality.
-* The cache speeds up repeated lookups.
-* Designed for simple, conversation-style text generation.
+---
 
 ## Related Tools and Resources
 
@@ -85,7 +90,8 @@ ai.setup(
 * [PyAutoGUI](https://pypi.org/project/PyAutoGUI/)
 * [GSM8K Dataset Viewer](https://huggingface.co/datasets/openai/gsm8k/viewer)
 
+---
+
 ## License
 
-This project is licensed under **CC BY-NC 4.0**.
-You may share and adapt the material with attribution. Commercial use is not permitted.
+**CC BY-NC 4.0** – Share and adapt with attribution. No commercial use.
