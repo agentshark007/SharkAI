@@ -8,11 +8,14 @@ def random_list(length, min_value, max_value):
 
 class Layer:
     def __init__(self, nodes, bias_range=(-3, 3)):
-        self.nodes = random_list(nodes, *bias_range)  # Random bias initialization
+        self.nodes = [0.0] * nodes         # node activations
+        self.biases = random_list(nodes, *bias_range)  # bias values
 
 
 class InputLayer(Layer):
-    pass
+    def __init__(self, nodes):
+        super().__init__(nodes)
+        self.biases = [0.0] * nodes  # inputs have no bias
 
 
 class HiddenLayer(Layer):
@@ -30,14 +33,14 @@ class NeuralNetwork:
 
     @staticmethod
     def sigmoid(x):
+        if x < -709: return 0.0
+        if x > 709: return 1.0
         return 1 / (1 + math.exp(-x))
 
     def add_layer(self, layer):
         self.layers.append(layer)
 
     def generate_connections(self):
-        if len(self.layers) < 2:
-            return
         self.connections = []
         for i in range(len(self.layers) - 1):
             layer_connections = []
@@ -56,12 +59,12 @@ class NeuralNetwork:
         for l in range(1, len(self.layers)):
             current_layer = self.layers[l]
             previous_layer = self.layers[l - 1]
-            for n, _ in enumerate(current_layer.nodes):
+            for n in range(len(current_layer.nodes)):
                 total_input = sum(
                     previous_layer.nodes[pn] * self.connections[l - 1][pn][n]
                     for pn in range(len(previous_layer.nodes))
                 )
-                total_input += current_layer.nodes[n]  # add bias
+                total_input += current_layer.biases[n]  # add bias
                 current_layer.nodes[n] = self.sigmoid(total_input)
 
     # Input/Output access
@@ -82,33 +85,33 @@ class NeuralNetwork:
         self.layers[layer].nodes[node] = value
 
     # Weight access
-    def get_weight(self, start_layer, start_node, end_layer, end_node):
+    def get_weight(self, start_layer, start_node, end_node):
         return self.connections[start_layer][start_node][end_node]
 
-    def set_weight(self, start_layer, start_node, end_layer, end_node, value):
+    def set_weight(self, start_layer, start_node, end_node, value):
         self.connections[start_layer][start_node][end_node] = value
 
-    def randomize_weight(self, start_layer, start_node, end_layer, end_node):
-        self.set_weight(start_layer, start_node, end_layer, end_node, random.uniform(-1, 1))
+    def randomize_weight(self, start_layer, start_node, end_node):
+        self.set_weight(start_layer, start_node, end_node, random.uniform(-1, 1))
 
-    def nudge_weight(self, start_layer, start_node, end_layer, end_node, amount):
+    def nudge_weight(self, start_layer, start_node, end_node, amount):
         self.set_weight(
-            start_layer, start_node, end_layer, end_node,
-            self.get_weight(start_layer, start_node, end_layer, end_node) + amount
+            start_layer, start_node, end_node,
+            self.get_weight(start_layer, start_node, end_node) + amount
         )
 
     # Bias access
     def get_bias(self, layer, node):
-        return self.layers[layer].nodes[node]
+        return self.layers[layer].biases[node]
 
     def set_bias(self, layer, node, value):
-        self.layers[layer].nodes[node] = value
+        self.layers[layer].biases[node] = value
 
     def randomize_bias(self, layer, node):
-        self.set_bias(layer, node, random.uniform(-3, 3))
+        self.layers[layer].biases[node] = random.uniform(-3, 3)
 
     def nudge_bias(self, layer, node, amount):
-        self.set_bias(layer, node, self.get_bias(layer, node) + amount)
+        self.layers[layer].biases[node] += amount
 
     # Forward generation
     def generate(self, inputs):
