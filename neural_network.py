@@ -67,6 +67,44 @@ class NeuralNetwork:
                 total_input += current_layer.biases[n]  # add bias
                 current_layer.nodes[n] = self.sigmoid(total_input)
 
+    def backward(self, targets, lr):
+        # collect activations
+        activations = [layer.nodes for layer in self.layers]
+
+        # compute deltas list, same shape as layers
+        deltas = [None] * len(self.layers)
+
+        # output layer delta
+        output = activations[-1]
+        deltas[-1] = [
+            (output[n] - targets[n]) * output[n] * (1 - output[n])
+            for n in range(len(output))
+        ]
+
+        # hidden deltas (from second-last down to first hidden)
+        for l in range(len(self.layers) - 2, 0, -1):
+            layer = self.layers[l]
+            next_layer = self.layers[l + 1]
+            deltas[l] = []
+            for i in range(len(layer.nodes)):
+                s = 0.0
+                for j in range(len(next_layer.nodes)):
+                    s += deltas[l + 1][j] * self.connections[l][i][j]
+                deltas[l].append(s * layer.nodes[i] * (1 - layer.nodes[i]))
+
+        # update weights
+        for l in range(len(self.connections)):
+            for i in range(len(self.connections[l])):
+                for j in range(len(self.connections[l][i])):
+                    grad = activations[l][i] * deltas[l + 1][j]
+                    self.connections[l][i][j] -= lr * grad
+
+        # update biases
+        for l in range(1, len(self.layers)):
+            for n in range(len(self.layers[l].biases)):
+                self.layers[l].biases[n] -= lr * deltas[l][n]
+
+
     # Input/Output access
     def get_input(self, node):
         return self.find_layer_type(InputLayer).nodes[node]
