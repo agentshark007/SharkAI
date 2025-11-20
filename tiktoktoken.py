@@ -1,5 +1,24 @@
-def tokenize(text):
-    "Tokenized"
+def generate_tokens(lst):
+    # char -> index mapping
+    return {char: i for i, char in enumerate(lst)}
 
-def detokenize(tokens):
-    return "Detokenized"
+def generate_reverse_tokens(lst):
+    # index -> char mapping
+    return {i: char for i, char in enumerate(lst)}
+
+chars = ['', '', '', ' ', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', 
+         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
+         ':', ';', '<', '=', '>', '?', '@', 
+         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
+         '[', '\\', ']', '^', '_', '`', 
+         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
+         '{', '|', '}', '~']
+
+tokens = generate_tokens(chars)
+reverse_tokens = generate_reverse_tokens(chars)
+
+def tokenize(text):
+    return [tokens[char] for char in text]
+
+def detokenize(indices):
+    return ''.join(reverse_tokens[i] for i in indices)
