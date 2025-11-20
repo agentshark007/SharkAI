@@ -75,23 +75,6 @@ for i, layer in enumerate(nn.layers):
 
 ---
 
-## Example Dataset Format (optional)
-
-```
-<START>user<SEP>Hello<END>
-<START>assistant<SEP>Hi there!<END>
-```
-
----
-
-## Related Tools and Resources
-
-* [BNF Generator](https://baturin.org/tools/bnfgen/)
-* [PyAutoGUI](https://pypi.org/project/PyAutoGUI/)
-* [GSM8K Dataset Viewer](https://huggingface.co/datasets/openai/gsm8k/viewer)
-
----
-
 ## License
 
 **CC BY-NC 4.0** – Share and adapt with attribution. No commercial use.
