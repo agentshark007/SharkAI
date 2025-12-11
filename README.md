@@ -68,7 +68,7 @@ for i, layer in enumerate(nn.layers):
 * `get_input(node)` / `set_input(node, value)` – Access input nodes
 * `get_output(node)` – Access output nodes
 * `get_value(layer, node)` / `set_value(layer, node, value)` – Access any node
-* `get_weight(start_layer, start_node, end_layer, end_node)` / `set_weight(...)` – Access weights
+* `get_weight(start_layer, start_node, end_node)` / `set_weight(...)` – Access weights
 * `get_bias(layer, node)` / `set_bias(layer, node, value)` – Access biases
 * `nudge_weight` / `nudge_bias` – Increment weights or biases
 * `randomize_weight` / `randomize_bias` – Randomize weights or biases
