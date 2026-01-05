@@ -1,6 +1,7 @@
 from neural_network import NeuralNetwork, InputLayer, HiddenLayer, OutputLayer
 from tiktoktoken import tokenize, detokenize, tokens
 
+
 class SharkAI:
     def __init__(self, lookback_tokens):
         self.lookback_tokens = lookback_tokens
@@ -12,30 +13,36 @@ class SharkAI:
         self.network.generate_connections()
 
     def train(self, dataset, epochs=10, learning_rate=0.05):
-        """
-        Train the network on a dataset of (input_tokens, target_vector) pairs.
-        """
         for epoch in range(epochs):
             total_loss = 0.0
             count = 0
+            failures = 0
 
             for input_tokens, target_vector in dataset:
-                # Clip or pad input tokens to match input layer size
                 inputs = input_tokens[-self.lookback_tokens:]
                 while len(inputs) < self.lookback_tokens:
-                    inputs = [0] + inputs  # pad with 0 if too short
+                    inputs = [0] + inputs
 
                 outputs = self.network.generate(inputs)
 
-                # mean squared error
-                sample_loss = sum((outputs[i] - target_vector[i])**2 for i in range(len(target_vector))) / len(target_vector)
+                # loss
+                sample_loss = sum(
+                    (outputs[i] - target_vector[i])**2 for i in range(
+                        len(target_vector))) / len(target_vector)
                 total_loss += sample_loss
                 count += 1
+
+                # failure check
+                predicted = outputs.index(max(outputs))
+                target = target_vector.index(1.0)
+                if predicted != target:
+                    failures += 1
 
                 self.network.backward(target_vector, learning_rate)
 
             avg_loss = total_loss / count if count else 0.0
-            print(f"Epoch {epoch + 1}/{epochs} - Loss: {avg_loss:.6f}")
+            print(
+                f"Epoch {epoch + 1}/{epochs} - Loss: {avg_loss:.6f} - Failures: {failures}/{count}")
 
     def generate_response(self, prompt, max_length=50):
         input_tokens = tokenize(prompt)
@@ -87,7 +94,7 @@ if __name__ == "__main__":
     dataset = build_dataset_from_file("data.txt", lookback)
 
     # Train the AI
-    ai.train(dataset, epochs=100, learning_rate=0.1)
+    ai.train(dataset, epochs=100, learning_rate=0.5)
 
     print("\nHello, i am an AI. Type \"exit\" to exit.\n")
     while True:

@@ -33,8 +33,10 @@ class NeuralNetwork:
 
     @staticmethod
     def sigmoid(x):
-        if x < -709: return 0.0
-        if x > 709: return 1.0
+        if x < -709:
+            return 0.0
+        if x > 709:
+            return 1.0
         return 1 / (1 + math.exp(-x))
 
     def add_layer(self, layer):
@@ -45,7 +47,8 @@ class NeuralNetwork:
         for i in range(len(self.layers) - 1):
             layer_connections = []
             for _ in range(len(self.layers[i].nodes)):
-                node_connections = random_list(len(self.layers[i + 1].nodes), -1, 1)
+                node_connections = random_list(
+                    len(self.layers[i + 1].nodes), -1, 1)
                 layer_connections.append(node_connections)
             self.connections.append(layer_connections)
 
@@ -104,8 +107,8 @@ class NeuralNetwork:
             for n in range(len(self.layers[l].biases)):
                 self.layers[l].biases[n] -= lr * deltas[l][n]
 
-
     # Input/Output access
+
     def get_input(self, node):
         return self.find_layer_type(InputLayer).nodes[node]
 
@@ -130,7 +133,8 @@ class NeuralNetwork:
         self.connections[start_layer][start_node][end_node] = value
 
     def randomize_weight(self, start_layer, start_node, end_node):
-        self.set_weight(start_layer, start_node, end_node, random.uniform(-1, 1))
+        self.set_weight(start_layer, start_node,
+                        end_node, random.uniform(-1, 1))
 
     def nudge_weight(self, start_layer, start_node, end_node, amount):
         self.set_weight(

@@ -7,9 +7,11 @@ def add_tokens_to_dataset(dataset, start_tag, sep_tag, end_tag):
 
     for i, line in enumerate(lines):
         if i % 2 == 0:
-            lines[i] = add_tokens_to_string(line, "user", start_tag, sep_tag, end_tag)
+            lines[i] = add_tokens_to_string(
+                line, "user", start_tag, sep_tag, end_tag)
         else:
-            lines[i] = add_tokens_to_string(line, "assistant", start_tag, sep_tag, end_tag)
+            lines[i] = add_tokens_to_string(
+                line, "assistant", start_tag, sep_tag, end_tag)
 
     return "\n".join(lines)
 

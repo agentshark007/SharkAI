@@ -17,12 +17,15 @@ nn.set_input(1, -0.5)
 for l in range(len(nn.connections)):
     for sn in range(len(nn.connections[l])):
         for en in range(len(nn.connections[l][sn])):
-            nn.set_weight(l, sn, l + 1, en, 0.1 * (sn + 1) * (en + 1))  # example weights
+            nn.set_weight(l, sn, l + 1, en, 0.1 * (sn + 1)
+                          * (en + 1))  # example weights
 
 # Manually set all biases to fixed values
-for layer_index, layer in enumerate(nn.layers[1:], start=1):  # skip input layer
+for layer_index, layer in enumerate(
+        nn.layers[1:], start=1):  # skip input layer
     for node_index in range(len(layer.nodes)):
-        nn.set_bias(layer_index, node_index, 0.2 * (node_index + 1))  # example biases
+        nn.set_bias(layer_index, node_index, 0.2 *
+                    (node_index + 1))  # example biases
 
 # Forward pass
 nn.forward()
